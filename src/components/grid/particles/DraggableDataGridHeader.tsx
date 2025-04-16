@@ -23,17 +23,22 @@ const DraggableDataGridHeader = <T,>({
     transform: CSS.Translate.toString(transform),
     transition: "width transform 0.2s ease-in-out",
     whiteSpace: "nowrap",
-    width: header.column.getSize(),
-    minWidth: header.getSize(),
+    width: header.column.getSize() || 200,
+    minWidth: header.getSize() || 200,
     zIndex: isDragging ? 1 : 0,
   };
 
   return (
-    <GridHead colSpan={header.colSpan} ref={setNodeRef} style={style}>
+    <GridHead
+      colSpan={header.colSpan}
+      rowSpan={header.colSpan}
+      ref={setNodeRef}
+      style={style}
+    >
       {header.isPlaceholder
         ? null
         : flexRender(header.column.columnDef.header, header.getContext())}
-      <button {...attributes} {...listeners}>
+      <button {...attributes} {...listeners} className="ml-auto">
         <Grip size={14} />
       </button>
     </GridHead>

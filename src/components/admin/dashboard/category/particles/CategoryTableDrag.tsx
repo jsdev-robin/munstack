@@ -9,7 +9,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-// needed for table body level scope DnD setup
 import {
   DndContext,
   KeyboardSensor,
@@ -380,52 +379,58 @@ const CategoryTableDrag = () => {
             onDragEnd={handleDragEnd}
             sensors={sensors}
           >
-            <div className="p-2">
-              <div className="h-4" />
-              <div className="flex flex-wrap gap-2">
-                <button className="border p-1">Regenerate</button>
-              </div>
-              <div className="h-4" />
-              <DataGridHeader>
-                <Grid>
-                  <GridHeader>
-                    {table.getHeaderGroups().map((headerGroup) => (
-                      <GridRow key={headerGroup.id}>
-                        <SortableContext
-                          items={columnOrder}
-                          strategy={horizontalListSortingStrategy}
+            <div className="flex relative rounded-md overflow-hidden border border-border">
+              <div className="overflow-hidden flex-1">
+                <DataGridHeader>
+                  <Grid className="w-full table-fixed">
+                    <GridHeader>
+                      {table.getHeaderGroups().map((headerGroup) => (
+                        <GridRow
+                          key={headerGroup.id}
+                          className="*:border-r *:border-border *:last:border-none border-none"
                         >
-                          {headerGroup.headers.map((header) => (
-                            <DraggableDataGridHeader
-                              key={header.id}
-                              header={header}
-                            />
-                          ))}
-                        </SortableContext>
-                      </GridRow>
-                    ))}
-                  </GridHeader>
-                </Grid>
-              </DataGridHeader>
-              <DataGridBody>
-                <Grid>
-                  <GridBody>
-                    {table.getRowModel().rows.map((row) => (
-                      <GridRow key={row.id}>
-                        {row.getVisibleCells().map((cell) => (
                           <SortableContext
-                            key={cell.id}
                             items={columnOrder}
                             strategy={horizontalListSortingStrategy}
                           >
-                            <DragDataGridAlongCell key={cell.id} cell={cell} />
+                            {headerGroup.headers.map((header) => (
+                              <DraggableDataGridHeader
+                                key={header.id}
+                                header={header}
+                              />
+                            ))}
                           </SortableContext>
-                        ))}
-                      </GridRow>
-                    ))}
-                  </GridBody>
-                </Grid>
-              </DataGridBody>
+                        </GridRow>
+                      ))}
+                    </GridHeader>
+                  </Grid>
+                </DataGridHeader>
+                <DataGridBody>
+                  <Grid className="w-full table-fixed">
+                    <GridBody>
+                      {table.getRowModel().rows.map((row) => (
+                        <GridRow
+                          key={row.id}
+                          className="*:border-r *:border-border"
+                        >
+                          {row.getVisibleCells().map((cell) => (
+                            <SortableContext
+                              key={cell.id}
+                              items={columnOrder}
+                              strategy={horizontalListSortingStrategy}
+                            >
+                              <DragDataGridAlongCell
+                                key={cell.id}
+                                cell={cell}
+                              />
+                            </SortableContext>
+                          ))}
+                        </GridRow>
+                      ))}
+                    </GridBody>
+                  </Grid>
+                </DataGridBody>
+              </div>
             </div>
           </DndContext>
         </CardContent>

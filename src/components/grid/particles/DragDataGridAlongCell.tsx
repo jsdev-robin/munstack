@@ -16,13 +16,13 @@ const DragDataGridAlongCell = <T,>({ cell }: { cell: Cell<T, unknown> }) => {
     position: "relative",
     transform: CSS.Translate.toString(transform),
     transition: "width transform 0.2s ease-in-out",
-    width: cell.column.getSize(),
-    minWidth: cell.column.getSize(),
+    width: cell.column.getSize() || 200,
+    minWidth: cell.column.getSize() || 200,
     zIndex: isDragging ? 1 : 0,
   };
 
   return (
-    <GridCell style={style} ref={setNodeRef}>
+    <GridCell style={style} ref={setNodeRef} className="truncate">
       {flexRender(cell.column.columnDef.cell, cell.getContext())}
     </GridCell>
   );

@@ -3,6 +3,7 @@
 import React from "react";
 import { DataGridPrivider } from "@/context/data-grid-context";
 import { flexRender, Table } from "@tanstack/react-table";
+
 import {
   Grid,
   GridBody,
@@ -11,7 +12,8 @@ import {
   GridHeader,
   GridRow,
 } from "../ui/grid";
-import { cn } from "@/lib/utils";
+import DataGridHeader from "./DataGridHeader";
+import DataGridBody from "./DataGridBody";
 
 export interface DataGridProps<T> {
   table: Table<T>;
@@ -22,11 +24,7 @@ const DataGrid = <T,>({ table }: DataGridProps<T>) => {
     <DataGridPrivider table={table}>
       <div className="flex relative rounded-md overflow-hidden border border-border">
         <div className="overflow-hidden flex-1">
-          <div
-            className={cn(
-              "w-full bg-muted overflow-hidden reserve-scrollbar-space scrollbar-none border-b border-border"
-            )}
-          >
+          <DataGridHeader>
             <Grid className="w-full table-fixed">
               <GridHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
@@ -81,11 +79,8 @@ const DataGrid = <T,>({ table }: DataGridProps<T>) => {
                 ))}
               </GridHeader>
             </Grid>
-          </div>
-          <div
-            className={cn("w-full overflow-auto")}
-            style={{ maxHeight: "70vh" }}
-          >
+          </DataGridHeader>
+          <DataGridBody>
             <Grid className="w-full table-fixed">
               <GridBody>
                 {table.getRowModel().rows.map((row) => {
@@ -117,7 +112,7 @@ const DataGrid = <T,>({ table }: DataGridProps<T>) => {
                 })}
               </GridBody>
             </Grid>
-          </div>
+          </DataGridBody>
         </div>
       </div>
     </DataGridPrivider>

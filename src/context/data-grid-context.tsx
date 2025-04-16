@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-"use client";
-
 import { DataGridProps } from "@/components/grid/Index";
 import { Table } from "@tanstack/react-table";
 import React, { createContext, useContext, useRef } from "react";

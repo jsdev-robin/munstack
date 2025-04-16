@@ -1,13 +1,10 @@
 "use client";
 
-import React, { CSSProperties } from "react";
+import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
-  Cell,
   ColumnDef,
-  Header,
-  flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
@@ -30,12 +27,11 @@ import {
   horizontalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
-// needed for row & cell level scope DnD setup
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import DataGridHeader from "@/components/grid/DataGridHeader";
 import DataGridBody from "@/components/grid/DataGridBody";
 import { DataGridPrivider } from "@/context/data-grid-context";
+import DraggableDataGridHeader from "../../../../grid/particles/DraggableDataGridHeader";
+import DragDataGridAlongCell from "@/components/grid/particles/DragDataGridAlongCell";
 
 type Person = {
   firstName: string;
@@ -286,59 +282,6 @@ const people: Person[] = [
   },
 ];
 
-const DraggableTableHeader = ({
-  header,
-}: {
-  header: Header<Person, unknown>;
-}) => {
-  const { attributes, isDragging, listeners, setNodeRef, transform } =
-    useSortable({
-      id: header.column.id,
-    });
-
-  const style: CSSProperties = {
-    opacity: isDragging ? 0.8 : 1,
-    position: "relative",
-    transform: CSS.Translate.toString(transform), // translate instead of transform to avoid squishing
-    transition: "width transform 0.2s ease-in-out",
-    whiteSpace: "nowrap",
-    width: header.column.getSize(),
-    zIndex: isDragging ? 1 : 0,
-  };
-
-  return (
-    <th colSpan={header.colSpan} ref={setNodeRef} style={style}>
-      {header.isPlaceholder
-        ? null
-        : flexRender(header.column.columnDef.header, header.getContext())}
-      <button {...attributes} {...listeners}>
-        🟰
-      </button>
-    </th>
-  );
-};
-
-const DragAlongCell = ({ cell }: { cell: Cell<Person, unknown> }) => {
-  const { isDragging, setNodeRef, transform } = useSortable({
-    id: cell.column.id,
-  });
-
-  const style: CSSProperties = {
-    opacity: isDragging ? 0.8 : 1,
-    position: "relative",
-    transform: CSS.Translate.toString(transform), // translate instead of transform to avoid squishing
-    transition: "width transform 0.2s ease-in-out",
-    width: cell.column.getSize(),
-    zIndex: isDragging ? 1 : 0,
-  };
-
-  return (
-    <td style={style} ref={setNodeRef}>
-      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-    </td>
-  );
-};
-
 const CategoryTableDrag = () => {
   const columns = React.useMemo<ColumnDef<Person>[]>(
     () => [
@@ -396,19 +339,15 @@ const CategoryTableDrag = () => {
       columnOrder,
     },
     onColumnOrderChange: setColumnOrder,
-    debugTable: true,
-    debugHeaders: true,
-    debugColumns: true,
   });
 
-  // reorder columns after drag & drop
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
     if (active && over && active.id !== over.id) {
       setColumnOrder((columnOrder) => {
         const oldIndex = columnOrder.indexOf(active.id as string);
         const newIndex = columnOrder.indexOf(over.id as string);
-        return arrayMove(columnOrder, oldIndex, newIndex); //this is just a splice util
+        return arrayMove(columnOrder, oldIndex, newIndex);
       });
     }
   }
@@ -452,7 +391,7 @@ const CategoryTableDrag = () => {
                           strategy={horizontalListSortingStrategy}
                         >
                           {headerGroup.headers.map((header) => (
-                            <DraggableTableHeader
+                            <DraggableDataGridHeader
                               key={header.id}
                               header={header}
                             />
@@ -474,7 +413,7 @@ const CategoryTableDrag = () => {
                             items={columnOrder}
                             strategy={horizontalListSortingStrategy}
                           >
-                            <DragAlongCell key={cell.id} cell={cell} />
+                            <DragDataGridAlongCell key={cell.id} cell={cell} />
                           </SortableContext>
                         ))}
                       </tr>
@@ -482,7 +421,6 @@ const CategoryTableDrag = () => {
                   </tbody>
                 </table>
               </DataGridBody>
-              <pre>{JSON.stringify(data, null, 2)}</pre>
             </div>
           </DndContext>
         </CardContent>

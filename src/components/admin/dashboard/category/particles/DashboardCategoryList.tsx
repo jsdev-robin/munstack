@@ -11,7 +11,7 @@ import {
 } from "@tanstack/react-table";
 import DataGrid from "@/components/grid/Index";
 
-export type Person = {
+type Person = {
   firstName: string;
   lastName: string | undefined;
   age: number;
@@ -438,11 +438,7 @@ const DashboardCategoryList = () => {
         </div>
       </CardHeader>
       <CardContent className="p-4 lg:p-5">
-        <DataGrid
-          table={table}
-          columnOrder={columnOrder}
-          setColumnOrder={setColumnOrder}
-        />
+        <DataGrid table={table} />
       </CardContent>
     </Card>
   );

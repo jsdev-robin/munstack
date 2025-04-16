@@ -101,9 +101,12 @@ const data = {
       url: "#",
       icon: ListFilter,
       items: [
-        { title: "Categories", url: "/dashboard/category" },
-        { title: "Sub Categories", url: "/dashboard/sub-category" },
-        { title: "Sub Sub Categories", url: "/dashboard/sub-sub-category" },
+        { title: "Categories", url: "/admin/dashboard/category" },
+        { title: "Sub Categories", url: "/admin/dashboard/sub-category" },
+        {
+          title: "Sub Sub Categories",
+          url: "/admin/dashboard/sub-sub-category",
+        },
       ],
     },
     {

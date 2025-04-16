@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { DataGridPrivider } from "@/context/data-grid-context";
 import { Table } from "@tanstack/react-table";

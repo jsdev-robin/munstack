@@ -15,8 +15,7 @@ const DataGridBody = () => {
       style={{ maxHeight: "70vh" }}
       onScroll={() => {
         if (headerRef.current && bodyRef.current) {
-          const scrollLeft = bodyRef.current.scrollLeft;
-          headerRef.current.scrollLeft = scrollLeft;
+          headerRef.current.scrollLeft = bodyRef.current.scrollLeft;
         }
       }}
     >

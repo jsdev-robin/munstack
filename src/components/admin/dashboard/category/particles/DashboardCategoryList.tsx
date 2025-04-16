@@ -11,7 +11,7 @@ import {
 } from "@tanstack/react-table";
 import DataGrid from "@/components/grid/Index";
 
-type Person = {
+export type Person = {
   firstName: string;
   lastName: string | undefined;
   age: number;
@@ -412,11 +412,19 @@ const DashboardCategoryList = () => {
     []
   );
 
+  const [columnOrder, setColumnOrder] = React.useState<string[]>(() =>
+    columns.map((c) => c.id!)
+  );
+
   const table = useReactTable({
     columns,
     data,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    state: {
+      columnOrder,
+    },
+    onColumnOrderChange: setColumnOrder,
   });
 
   return (
@@ -430,7 +438,11 @@ const DashboardCategoryList = () => {
         </div>
       </CardHeader>
       <CardContent className="p-4 lg:p-5">
-        <DataGrid table={table} />
+        <DataGrid
+          table={table}
+          columnOrder={columnOrder}
+          setColumnOrder={setColumnOrder}
+        />
       </CardContent>
     </Card>
   );

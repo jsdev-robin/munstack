@@ -1,27 +1,35 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import { DataGridProps } from "@/components/grid/Index";
+import { Table } from "@tanstack/react-table";
 import React, { createContext, useContext, useRef } from "react";
 
-interface DataGridContextValue {
-  gridHeaderRef: React.RefObject<HTMLDivElement | null>;
-  gridBodyRef: React.RefObject<HTMLDivElement | null>;
+interface DataGridContextValue<T> {
+  headerRef: React.RefObject<HTMLDivElement | null>;
+  bodyRef: React.RefObject<HTMLDivElement | null>;
+  table: Table<T>;
 }
 
-const DataGridContext = createContext<DataGridContextValue | null>(null);
+const DataGridContext = createContext<DataGridContextValue<any> | null>(null);
 
-export const DataGridPrivider = ({
+interface MunGridProviderProps<T> extends DataGridProps<T> {
+  children?: React.ReactNode;
+}
+
+export const DataGridPrivider = <T,>({
   children,
-}: {
-  children: React.ReactNode;
-}) => {
-  const gridHeaderRef = useRef<HTMLDivElement>(null);
-  const gridBodyRef = useRef<HTMLDivElement>(null);
+  table,
+}: MunGridProviderProps<T>) => {
+  const headerRef = useRef<HTMLDivElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
 
   return (
     <DataGridContext.Provider
       value={{
-        gridHeaderRef,
-        gridBodyRef,
+        headerRef,
+        bodyRef,
+        table,
       }}
     >
       {children}
@@ -31,7 +39,7 @@ export const DataGridPrivider = ({
 
 export function useDataGrid() {
   const context = useContext(
-    DataGridContext as React.Context<DataGridContextValue | null>
+    DataGridContext as React.Context<DataGridContextValue<any> | null>
   );
 
   if (!context) {

@@ -32,6 +32,7 @@ import DataGridBody from "@/components/grid/DataGridBody";
 import { DataGridPrivider } from "@/context/data-grid-context";
 import DraggableDataGridHeader from "../../../../grid/particles/DraggableDataGridHeader";
 import DragDataGridAlongCell from "@/components/grid/particles/DragDataGridAlongCell";
+import { Grid, GridBody, GridHeader, GridRow } from "@/components/ui/grid";
 
 type Person = {
   firstName: string;
@@ -386,10 +387,10 @@ const CategoryTableDrag = () => {
               </div>
               <div className="h-4" />
               <DataGridHeader>
-                <table>
-                  <thead>
+                <Grid>
+                  <GridHeader>
                     {table.getHeaderGroups().map((headerGroup) => (
-                      <tr key={headerGroup.id}>
+                      <GridRow key={headerGroup.id}>
                         <SortableContext
                           items={columnOrder}
                           strategy={horizontalListSortingStrategy}
@@ -401,16 +402,16 @@ const CategoryTableDrag = () => {
                             />
                           ))}
                         </SortableContext>
-                      </tr>
+                      </GridRow>
                     ))}
-                  </thead>
-                </table>
+                  </GridHeader>
+                </Grid>
               </DataGridHeader>
               <DataGridBody>
-                <table>
-                  <tbody>
+                <Grid>
+                  <GridBody>
                     {table.getRowModel().rows.map((row) => (
-                      <tr key={row.id}>
+                      <GridRow key={row.id}>
                         {row.getVisibleCells().map((cell) => (
                           <SortableContext
                             key={cell.id}
@@ -420,10 +421,10 @@ const CategoryTableDrag = () => {
                             <DragDataGridAlongCell key={cell.id} cell={cell} />
                           </SortableContext>
                         ))}
-                      </tr>
+                      </GridRow>
                     ))}
-                  </tbody>
-                </table>
+                  </GridBody>
+                </Grid>
               </DataGridBody>
             </div>
           </DndContext>

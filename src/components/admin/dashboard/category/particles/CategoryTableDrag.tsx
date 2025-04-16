@@ -358,7 +358,11 @@ const CategoryTableDrag = () => {
     useSensor(KeyboardSensor, {})
   );
   return (
-    <DataGridPrivider table={table}>
+    <DataGridPrivider
+      table={table}
+      columnOrder={columnOrder}
+      setColumnOrder={setColumnOrder}
+    >
       <Card>
         <CardHeader className="border-b border-border p-4 lg:p-5">
           <div className="flex items-center gap-2">

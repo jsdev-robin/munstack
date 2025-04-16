@@ -6,7 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import {
   ColumnDef,
   getCoreRowModel,
-  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import DataGrid from "@/components/grid/Index";
@@ -365,8 +364,6 @@ const people: Person[] = [
 ];
 
 const DashboardCategoryList = () => {
-  const [data] = useState<Person[]>(people);
-
   const columns = React.useMemo<ColumnDef<Person>[]>(
     () => [
       {
@@ -411,7 +408,7 @@ const DashboardCategoryList = () => {
     ],
     []
   );
-
+  const [data] = useState<Person[]>(people);
   const [columnOrder, setColumnOrder] = React.useState<string[]>(() =>
     columns.map((c) => c.id!)
   );
@@ -420,7 +417,6 @@ const DashboardCategoryList = () => {
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
     state: {
       columnOrder,
     },
@@ -438,7 +434,11 @@ const DashboardCategoryList = () => {
         </div>
       </CardHeader>
       <CardContent className="p-4 lg:p-5">
-        <DataGrid table={table} />
+        <DataGrid
+          table={table}
+          columnOrder={columnOrder}
+          setColumnOrder={setColumnOrder}
+        />
       </CardContent>
     </Card>
   );

@@ -1,8 +1,11 @@
+"use client";
+
 import React, { CSSProperties } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { flexRender, Header } from "@tanstack/react-table";
 import { CSS } from "@dnd-kit/utilities";
 import { Grip } from "lucide-react";
+import { GridHead } from "@/components/ui/grid";
 
 const DraggableDataGridHeader = <T,>({
   header,
@@ -21,18 +24,19 @@ const DraggableDataGridHeader = <T,>({
     transition: "width transform 0.2s ease-in-out",
     whiteSpace: "nowrap",
     width: header.column.getSize(),
+    minWidth: header.getSize(),
     zIndex: isDragging ? 1 : 0,
   };
 
   return (
-    <th colSpan={header.colSpan} ref={setNodeRef} style={style}>
+    <GridHead colSpan={header.colSpan} ref={setNodeRef} style={style}>
       {header.isPlaceholder
         ? null
         : flexRender(header.column.columnDef.header, header.getContext())}
       <button {...attributes} {...listeners}>
         <Grip size={14} />
       </button>
-    </th>
+    </GridHead>
   );
 };
 export default DraggableDataGridHeader;

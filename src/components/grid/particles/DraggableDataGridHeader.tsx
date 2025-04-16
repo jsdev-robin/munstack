@@ -30,10 +30,9 @@ const DraggableDataGridHeader = <T,>({
         ? null
         : flexRender(header.column.columnDef.header, header.getContext())}
       <button {...attributes} {...listeners}>
-        <Grip size={16} />
+        <Grip size={14} />
       </button>
     </th>
   );
 };
-
 export default DraggableDataGridHeader;

@@ -23,5 +23,4 @@ const DragDataGridAlongCell = <T,>({ cell }: { cell: Cell<T, unknown> }) => {
     </td>
   );
 };
-
 export default DragDataGridAlongCell;

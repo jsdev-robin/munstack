@@ -10,7 +10,6 @@ const DataGridBody = () => {
   const { table, headerRef, bodyRef } = useDataGrid();
   return (
     <div
-      ref={bodyRef}
       className={cn("w-full overflow-auto")}
       style={{ maxHeight: "70vh" }}
       onScroll={() => {

@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import DashboardCategoryCreate from "./particles/DashboardCategoryCreate";
 import DashboardCategoryList from "./particles/DashboardCategoryList";

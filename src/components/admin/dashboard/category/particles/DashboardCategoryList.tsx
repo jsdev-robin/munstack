@@ -415,7 +415,6 @@ const DashboardCategoryList = () => {
   const table = useReactTable({
     columns,
     data,
-    debugTable: true,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
   });

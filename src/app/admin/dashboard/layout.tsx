@@ -4,11 +4,11 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import AppSidebar from "@/components/dashboard/layout/AppSidebar";
 import { Separator } from "@/components/ui/separator";
-import NavHeader from "@/components/dashboard/layout/NavHeader";
 import { ModeSwitcher } from "@/components/ui/mode-switcher";
 import ThemeSelector from "@/components/ui/ThemeSelector";
+import AppSidebar from "@/components/admin/dashboard/layout/AppSidebar";
+import NavHeader from "@/components/admin/dashboard/layout/NavHeader";
 
 const DashboardLayout = async ({
   children,

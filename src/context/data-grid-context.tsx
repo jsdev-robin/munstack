@@ -17,8 +17,6 @@ export const DataGridPrivider = ({
   const gridHeaderRef = useRef<HTMLDivElement>(null);
   const gridBodyRef = useRef<HTMLDivElement>(null);
 
-  console.log(gridBodyRef);
-
   return (
     <DataGridContext.Provider
       value={{

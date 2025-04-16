@@ -379,11 +379,14 @@ const DashboardCategoryList = () => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [data] = useState<Person[]>(people);
 
+  console.log(sorting);
+
   const columns = React.useMemo<ColumnDef<Person>[]>(
     () => [
       {
         accessorKey: "firstName",
         cell: (info) => info.getValue(),
+        header: () => <span>First Name</span>,
       },
       {
         accessorFn: (row) => row.lastName,
@@ -419,6 +422,7 @@ const DashboardCategoryList = () => {
       {
         accessorKey: "createdAt",
         header: "Created At",
+        size: 500,
       },
     ],
     []
@@ -431,9 +435,6 @@ const DashboardCategoryList = () => {
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     onSortingChange: setSorting,
-    state: {
-      sorting,
-    },
   });
 
   return (

@@ -50,7 +50,11 @@ const DataGridBody = <T,>({ rowModel, headerGroup }: DataGridBodyProps<T>) => {
               <GridRow key={row.id} className="*:border-r *:border-border">
                 {row.getVisibleCells().map((cell) => {
                   return (
-                    <GridCell key={cell.id} className="truncate">
+                    <GridCell
+                      key={cell.id}
+                      tabIndex={0}
+                      className="truncate focus-within:bg-green-500/15"
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

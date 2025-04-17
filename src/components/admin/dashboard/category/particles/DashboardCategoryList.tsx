@@ -1,14 +1,90 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { CSSProperties } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import {
+  Cell,
   ColumnDef,
+  Header,
+  flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import DataGrid from "@/components/grid/Index";
+
+// needed for table body level scope DnD setup
+import {
+  DndContext,
+  KeyboardSensor,
+  MouseSensor,
+  TouchSensor,
+  closestCenter,
+  type DragEndEvent,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import { restrictToHorizontalAxis } from "@dnd-kit/modifiers";
+import {
+  arrayMove,
+  SortableContext,
+  horizontalListSortingStrategy,
+} from "@dnd-kit/sortable";
+
+// needed for row & cell level scope DnD setup
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+
+const DraggableTableHeader = ({
+  header,
+}: {
+  header: Header<Person, unknown>;
+}) => {
+  const { attributes, isDragging, listeners, setNodeRef, transform } =
+    useSortable({
+      id: header.column.id,
+    });
+
+  const style: CSSProperties = {
+    opacity: isDragging ? 0.8 : 1,
+    position: "relative",
+    transform: CSS.Translate.toString(transform), // translate instead of transform to avoid squishing
+    transition: "width transform 0.2s ease-in-out",
+    whiteSpace: "nowrap",
+    width: header.column.getSize(),
+    zIndex: isDragging ? 1 : 0,
+  };
+
+  return (
+    <th colSpan={header.colSpan} ref={setNodeRef} style={style}>
+      {header.isPlaceholder
+        ? null
+        : flexRender(header.column.columnDef.header, header.getContext())}
+      <button {...attributes} {...listeners}>
+        🟰
+      </button>
+    </th>
+  );
+};
+
+const DragAlongCell = ({ cell }: { cell: Cell<Person, unknown> }) => {
+  const { isDragging, setNodeRef, transform } = useSortable({
+    id: cell.column.id,
+  });
+
+  const style: CSSProperties = {
+    opacity: isDragging ? 0.8 : 1,
+    position: "relative",
+    transform: CSS.Translate.toString(transform), // translate instead of transform to avoid squishing
+    transition: "width transform 0.2s ease-in-out",
+    width: cell.column.getSize(),
+    zIndex: isDragging ? 1 : 0,
+  };
+
+  return (
+    <td style={style} ref={setNodeRef}>
+      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+    </td>
+  );
+};
 
 type Person = {
   firstName: string;
@@ -408,7 +484,8 @@ const DashboardCategoryList = () => {
     ],
     []
   );
-  const [data] = useState<Person[]>(people);
+
+  const [data] = React.useState(people);
   const [columnOrder, setColumnOrder] = React.useState<string[]>(() =>
     columns.map((c) => c.id!)
   );
@@ -421,24 +498,72 @@ const DashboardCategoryList = () => {
       columnOrder,
     },
     onColumnOrderChange: setColumnOrder,
+    debugTable: true,
+    debugHeaders: true,
+    debugColumns: true,
   });
 
+  // reorder columns after drag & drop
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (active && over && active.id !== over.id) {
+      setColumnOrder((columnOrder) => {
+        const oldIndex = columnOrder.indexOf(active.id as string);
+        const newIndex = columnOrder.indexOf(over.id as string);
+        return arrayMove(columnOrder, oldIndex, newIndex); //this is just a splice util
+      });
+    }
+  }
+
+  const sensors = useSensors(
+    useSensor(MouseSensor, {}),
+    useSensor(TouchSensor, {}),
+    useSensor(KeyboardSensor, {})
+  );
   return (
     <Card>
       <CardHeader className="border-b border-border p-4 lg:p-5">
-        <div className="flex items-center gap-2">
-          <CardTitle>Category list</CardTitle>
-          <Badge className="h-5 min-w-5 rounded-full px-1 font-mono tabular-nums">
-            8
-          </Badge>
-        </div>
+        <CardTitle>Category List</CardTitle>
       </CardHeader>
       <CardContent className="p-4 lg:p-5">
-        <DataGrid
-          table={table}
-          columnOrder={columnOrder}
-          setColumnOrder={setColumnOrder}
-        />
+        <DndContext
+          collisionDetection={closestCenter}
+          modifiers={[restrictToHorizontalAxis]}
+          onDragEnd={handleDragEnd}
+          sensors={sensors}
+        >
+          <table>
+            <thead>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id}>
+                  <SortableContext
+                    items={columnOrder}
+                    strategy={horizontalListSortingStrategy}
+                  >
+                    {headerGroup.headers.map((header) => (
+                      <DraggableTableHeader key={header.id} header={header} />
+                    ))}
+                  </SortableContext>
+                </tr>
+              ))}
+            </thead>
+            <tbody>
+              {table.getRowModel().rows.map((row) => (
+                <tr key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <SortableContext
+                      key={cell.id}
+                      items={columnOrder}
+                      strategy={horizontalListSortingStrategy}
+                    >
+                      <DragAlongCell key={cell.id} cell={cell} />
+                    </SortableContext>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </DndContext>
       </CardContent>
     </Card>
   );

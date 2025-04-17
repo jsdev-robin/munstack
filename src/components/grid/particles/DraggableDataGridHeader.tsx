@@ -4,7 +4,6 @@ import React, { CSSProperties } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { flexRender, Header } from "@tanstack/react-table";
 import { CSS } from "@dnd-kit/utilities";
-import { Grip } from "lucide-react";
 import { GridHead } from "@/components/ui/grid";
 
 const DraggableDataGridHeader = <T,>({
@@ -23,25 +22,20 @@ const DraggableDataGridHeader = <T,>({
     transform: CSS.Translate.toString(transform),
     transition: "width transform 0.2s ease-in-out",
     whiteSpace: "nowrap",
-    width: header.column.getSize() || 200,
-    minWidth: header.getSize() || 200,
+    width: header.column.getSize(),
     zIndex: isDragging ? 1 : 0,
   };
 
   return (
-    <GridHead
-      colSpan={header.colSpan}
-      rowSpan={header.colSpan}
-      ref={setNodeRef}
-      style={style}
-    >
+    <GridHead colSpan={header.colSpan} ref={setNodeRef} style={style}>
       {header.isPlaceholder
         ? null
         : flexRender(header.column.columnDef.header, header.getContext())}
-      <button {...attributes} {...listeners} className="ml-auto">
-        <Grip size={14} />
+      <button {...attributes} {...listeners}>
+        🟰
       </button>
     </GridHead>
   );
 };
+
 export default DraggableDataGridHeader;

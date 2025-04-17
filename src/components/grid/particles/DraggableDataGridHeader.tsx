@@ -35,8 +35,8 @@ const DraggableDataGridHeader = <T,>({
       colSpan={header.colSpan}
       ref={setNodeRef}
       style={style}
-      className={cn("group", {
-        "bg-card shadow-xl/30 ": isDragging,
+      className={cn("group truncate", {
+        "bg-card shadow-xl/30": isDragging,
       })}
     >
       <div className={cn("flex items-center justify-between")}>

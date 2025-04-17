@@ -406,6 +406,11 @@ const DashboardCategoryList = () => {
         header: "Profile phone",
         id: "phone",
       },
+      {
+        accessorKey: "createdAt",
+        header: "Profile createdAt",
+        id: "createdAt",
+      },
     ],
     []
   );

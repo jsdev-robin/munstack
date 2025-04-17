@@ -26,7 +26,7 @@ const DragDataGridAlongCell = <T,>({ cell }: { cell: Cell<T, unknown> }) => {
     <GridCell
       style={style}
       ref={setNodeRef}
-      className={cn({
+      className={cn("truncate", {
         "bg-card shadow-xl/30": isDragging,
       })}
     >

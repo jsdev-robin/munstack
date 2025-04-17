@@ -14,7 +14,7 @@ const DataGridBody = () => {
   return (
     <div
       className={cn("w-full overflow-auto")}
-      style={{ maxHeight: "70vh" }}
+      style={{ maxHeight: "70vh", height: "70vh" }}
       ref={bodyRef}
       onScroll={() => {
         if (headerRef.current && bodyRef.current) {
@@ -23,7 +23,7 @@ const DataGridBody = () => {
         }
       }}
     >
-      <Grid>
+      <Grid className="w-full table-fixed">
         <GridBody>
           {table.getRowModel().rows.map((row) => (
             <GridRow key={row.id} className="*:border-r *:border-border">

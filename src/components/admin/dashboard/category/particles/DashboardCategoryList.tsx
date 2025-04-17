@@ -1,12 +1,9 @@
 "use client";
 
-import React, { CSSProperties } from "react";
+import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  Cell,
   ColumnDef,
-  Header,
-  flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
@@ -23,17 +20,12 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { restrictToHorizontalAxis } from "@dnd-kit/modifiers";
-import {
-  arrayMove,
-  SortableContext,
-  horizontalListSortingStrategy,
-} from "@dnd-kit/sortable";
+import { arrayMove } from "@dnd-kit/sortable";
 
 // needed for row & cell level scope DnD setup
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
+import DataGrid from "@/components/grid/Index";
 
-type Person = {
+export type Person = {
   firstName: string;
   lastName: string | undefined;
   age: number;
@@ -478,101 +470,10 @@ const DashboardCategoryList = () => {
           onDragEnd={handleDragEnd}
           sensors={sensors}
         >
-          <div className="p-2">
-            <div className="h-4" />
-            <div className="flex flex-wrap gap-2">
-              <button className="border p-1">Regenerate</button>
-            </div>
-            <div className="h-4" />
-            <table>
-              <thead>
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <tr key={headerGroup.id}>
-                    <SortableContext
-                      items={columnOrder}
-                      strategy={horizontalListSortingStrategy}
-                    >
-                      {headerGroup.headers.map((header) => (
-                        <DraggableTableHeader key={header.id} header={header} />
-                      ))}
-                    </SortableContext>
-                  </tr>
-                ))}
-              </thead>
-              <tbody>
-                {table.getRowModel().rows.map((row) => (
-                  <tr key={row.id}>
-                    {row.getVisibleCells().map((cell) => (
-                      <SortableContext
-                        key={cell.id}
-                        items={columnOrder}
-                        strategy={horizontalListSortingStrategy}
-                      >
-                        <DragAlongCell key={cell.id} cell={cell} />
-                      </SortableContext>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <pre>{JSON.stringify(data, null, 2)}</pre>
-          </div>
+          <DataGrid table={table} columnOrder={columnOrder} />
         </DndContext>
       </CardContent>
     </Card>
-  );
-};
-
-const DraggableTableHeader = ({
-  header,
-}: {
-  header: Header<Person, unknown>;
-}) => {
-  const { attributes, isDragging, listeners, setNodeRef, transform } =
-    useSortable({
-      id: header.column.id,
-    });
-
-  const style: CSSProperties = {
-    opacity: isDragging ? 0.8 : 1,
-    position: "relative",
-    transform: CSS.Translate.toString(transform), // translate instead of transform to avoid squishing
-    transition: "width transform 0.2s ease-in-out",
-    whiteSpace: "nowrap",
-    width: header.column.getSize(),
-    zIndex: isDragging ? 1 : 0,
-  };
-
-  return (
-    <th colSpan={header.colSpan} ref={setNodeRef} style={style}>
-      {header.isPlaceholder
-        ? null
-        : flexRender(header.column.columnDef.header, header.getContext())}
-      <button {...attributes} {...listeners}>
-        🟰
-      </button>
-    </th>
-  );
-};
-
-const DragAlongCell = ({ cell }: { cell: Cell<Person, unknown> }) => {
-  const { isDragging, setNodeRef, transform } = useSortable({
-    id: cell.column.id,
-  });
-
-  const style: CSSProperties = {
-    opacity: isDragging ? 0.8 : 1,
-    position: "relative",
-    transform: CSS.Translate.toString(transform), // translate instead of transform to avoid squishing
-    transition: "width transform 0.2s ease-in-out",
-    width: cell.column.getSize(),
-    zIndex: isDragging ? 1 : 0,
-  };
-
-  return (
-    <td style={style} ref={setNodeRef}>
-      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-    </td>
   );
 };
 

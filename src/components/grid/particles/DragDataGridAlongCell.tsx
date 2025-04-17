@@ -5,6 +5,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { Cell, flexRender } from "@tanstack/react-table";
 import { CSS } from "@dnd-kit/utilities";
 import { GridCell } from "@/components/ui/grid";
+import { cn } from "@/lib/utils";
 
 const DragDataGridAlongCell = <T,>({ cell }: { cell: Cell<T, unknown> }) => {
   const { isDragging, setNodeRef, transform } = useSortable({
@@ -22,7 +23,13 @@ const DragDataGridAlongCell = <T,>({ cell }: { cell: Cell<T, unknown> }) => {
   };
 
   return (
-    <GridCell style={style} ref={setNodeRef}>
+    <GridCell
+      style={style}
+      ref={setNodeRef}
+      className={cn({
+        "bg-card shadow-xl/30": isDragging,
+      })}
+    >
       {flexRender(cell.column.columnDef.cell, cell.getContext())}
     </GridCell>
   );

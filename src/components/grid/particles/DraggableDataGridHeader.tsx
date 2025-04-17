@@ -5,6 +5,8 @@ import { useSortable } from "@dnd-kit/sortable";
 import { flexRender, Header } from "@tanstack/react-table";
 import { CSS } from "@dnd-kit/utilities";
 import { GridHead } from "@/components/ui/grid";
+import { GripHorizontal } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const DraggableDataGridHeader = <T,>({
   header,
@@ -28,13 +30,26 @@ const DraggableDataGridHeader = <T,>({
   };
 
   return (
-    <GridHead colSpan={header.colSpan} ref={setNodeRef} style={style}>
-      {header.isPlaceholder
-        ? null
-        : flexRender(header.column.columnDef.header, header.getContext())}
-      <button {...attributes} {...listeners}>
-        🟰
-      </button>
+    <GridHead
+      colSpan={header.colSpan}
+      ref={setNodeRef}
+      style={style}
+      className={cn({
+        "bg-card shadow-xl/30": isDragging,
+      })}
+    >
+      <div className={cn("flex items-center justify-between")}>
+        {header.isPlaceholder
+          ? null
+          : flexRender(header.column.columnDef.header, header.getContext())}
+        <button
+          {...attributes}
+          {...listeners}
+          className={cn({ "cursor-all-scroll": isDragging })}
+        >
+          <GripHorizontal />
+        </button>
+      </div>
     </GridHead>
   );
 };

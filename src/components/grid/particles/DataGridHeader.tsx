@@ -18,7 +18,7 @@ const DataGridHeader = () => {
       ref={headerRef}
     >
       <Grid className="w-full table-fixed">
-        <GridHeader>
+        <GridHeader className="h-12">
           {table.getHeaderGroups().map((headerGroup) => (
             <GridRow
               key={headerGroup.id}

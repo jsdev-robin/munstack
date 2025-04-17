@@ -33,59 +33,6 @@ import {
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
-const DraggableTableHeader = ({
-  header,
-}: {
-  header: Header<Person, unknown>;
-}) => {
-  const { attributes, isDragging, listeners, setNodeRef, transform } =
-    useSortable({
-      id: header.column.id,
-    });
-
-  const style: CSSProperties = {
-    opacity: isDragging ? 0.8 : 1,
-    position: "relative",
-    transform: CSS.Translate.toString(transform), // translate instead of transform to avoid squishing
-    transition: "width transform 0.2s ease-in-out",
-    whiteSpace: "nowrap",
-    width: header.column.getSize(),
-    zIndex: isDragging ? 1 : 0,
-  };
-
-  return (
-    <th colSpan={header.colSpan} ref={setNodeRef} style={style}>
-      {header.isPlaceholder
-        ? null
-        : flexRender(header.column.columnDef.header, header.getContext())}
-      <button {...attributes} {...listeners}>
-        🟰
-      </button>
-    </th>
-  );
-};
-
-const DragAlongCell = ({ cell }: { cell: Cell<Person, unknown> }) => {
-  const { isDragging, setNodeRef, transform } = useSortable({
-    id: cell.column.id,
-  });
-
-  const style: CSSProperties = {
-    opacity: isDragging ? 0.8 : 1,
-    position: "relative",
-    transform: CSS.Translate.toString(transform), // translate instead of transform to avoid squishing
-    transition: "width transform 0.2s ease-in-out",
-    width: cell.column.getSize(),
-    zIndex: isDragging ? 1 : 0,
-  };
-
-  return (
-    <td style={style} ref={setNodeRef}>
-      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-    </td>
-  );
-};
-
 type Person = {
   firstName: string;
   lastName: string | undefined;
@@ -445,41 +392,39 @@ const DashboardCategoryList = () => {
       {
         accessorKey: "firstName",
         cell: (info) => info.getValue(),
-        header: () => <span>First Name</span>,
+        id: "firstName",
+        size: 150,
       },
       {
         accessorFn: (row) => row.lastName,
-        id: "lastName",
         cell: (info) => info.getValue(),
         header: () => <span>Last Name</span>,
-        sortUndefined: "last",
-        sortDescFirst: false,
+        id: "lastName",
+        size: 150,
       },
       {
         accessorKey: "age",
         header: () => "Age",
+        id: "age",
+        size: 120,
       },
       {
         accessorKey: "visits",
         header: () => <span>Visits</span>,
-        sortUndefined: "last",
+        id: "visits",
+        size: 120,
       },
       {
         accessorKey: "status",
         header: "Status",
+        id: "status",
+        size: 150,
       },
       {
         accessorKey: "progress",
         header: "Profile Progress",
-      },
-      {
-        accessorKey: "rank",
-        header: "Rank",
-        invertSorting: true,
-      },
-      {
-        accessorKey: "createdAt",
-        header: "Created At",
+        id: "progress",
+        size: 180,
       },
     ],
     []
@@ -520,6 +465,7 @@ const DashboardCategoryList = () => {
     useSensor(TouchSensor, {}),
     useSensor(KeyboardSensor, {})
   );
+
   return (
     <Card>
       <CardHeader className="border-b border-border p-4 lg:p-5">
@@ -532,40 +478,101 @@ const DashboardCategoryList = () => {
           onDragEnd={handleDragEnd}
           sensors={sensors}
         >
-          <table>
-            <thead>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id}>
-                  <SortableContext
-                    items={columnOrder}
-                    strategy={horizontalListSortingStrategy}
-                  >
-                    {headerGroup.headers.map((header) => (
-                      <DraggableTableHeader key={header.id} header={header} />
-                    ))}
-                  </SortableContext>
-                </tr>
-              ))}
-            </thead>
-            <tbody>
-              {table.getRowModel().rows.map((row) => (
-                <tr key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
+          <div className="p-2">
+            <div className="h-4" />
+            <div className="flex flex-wrap gap-2">
+              <button className="border p-1">Regenerate</button>
+            </div>
+            <div className="h-4" />
+            <table>
+              <thead>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <tr key={headerGroup.id}>
                     <SortableContext
-                      key={cell.id}
                       items={columnOrder}
                       strategy={horizontalListSortingStrategy}
                     >
-                      <DragAlongCell key={cell.id} cell={cell} />
+                      {headerGroup.headers.map((header) => (
+                        <DraggableTableHeader key={header.id} header={header} />
+                      ))}
                     </SortableContext>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                  </tr>
+                ))}
+              </thead>
+              <tbody>
+                {table.getRowModel().rows.map((row) => (
+                  <tr key={row.id}>
+                    {row.getVisibleCells().map((cell) => (
+                      <SortableContext
+                        key={cell.id}
+                        items={columnOrder}
+                        strategy={horizontalListSortingStrategy}
+                      >
+                        <DragAlongCell key={cell.id} cell={cell} />
+                      </SortableContext>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <pre>{JSON.stringify(data, null, 2)}</pre>
+          </div>
         </DndContext>
       </CardContent>
     </Card>
+  );
+};
+
+const DraggableTableHeader = ({
+  header,
+}: {
+  header: Header<Person, unknown>;
+}) => {
+  const { attributes, isDragging, listeners, setNodeRef, transform } =
+    useSortable({
+      id: header.column.id,
+    });
+
+  const style: CSSProperties = {
+    opacity: isDragging ? 0.8 : 1,
+    position: "relative",
+    transform: CSS.Translate.toString(transform), // translate instead of transform to avoid squishing
+    transition: "width transform 0.2s ease-in-out",
+    whiteSpace: "nowrap",
+    width: header.column.getSize(),
+    zIndex: isDragging ? 1 : 0,
+  };
+
+  return (
+    <th colSpan={header.colSpan} ref={setNodeRef} style={style}>
+      {header.isPlaceholder
+        ? null
+        : flexRender(header.column.columnDef.header, header.getContext())}
+      <button {...attributes} {...listeners}>
+        🟰
+      </button>
+    </th>
+  );
+};
+
+const DragAlongCell = ({ cell }: { cell: Cell<Person, unknown> }) => {
+  const { isDragging, setNodeRef, transform } = useSortable({
+    id: cell.column.id,
+  });
+
+  const style: CSSProperties = {
+    opacity: isDragging ? 0.8 : 1,
+    position: "relative",
+    transform: CSS.Translate.toString(transform), // translate instead of transform to avoid squishing
+    transition: "width transform 0.2s ease-in-out",
+    width: cell.column.getSize(),
+    zIndex: isDragging ? 1 : 0,
+  };
+
+  return (
+    <td style={style} ref={setNodeRef}>
+      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+    </td>
   );
 };
 

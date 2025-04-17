@@ -7,22 +7,6 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-
-// needed for table body level scope DnD setup
-import {
-  DndContext,
-  KeyboardSensor,
-  MouseSensor,
-  TouchSensor,
-  closestCenter,
-  type DragEndEvent,
-  useSensor,
-  useSensors,
-} from "@dnd-kit/core";
-import { restrictToHorizontalAxis } from "@dnd-kit/modifiers";
-import { arrayMove } from "@dnd-kit/sortable";
-
-// needed for row & cell level scope DnD setup
 import DataGrid from "@/components/grid/Index";
 
 export type Person = {
@@ -444,38 +428,17 @@ const DashboardCategoryList = () => {
     debugColumns: true,
   });
 
-  // reorder columns after drag & drop
-  function handleDragEnd(event: DragEndEvent) {
-    const { active, over } = event;
-    if (active && over && active.id !== over.id) {
-      setColumnOrder((columnOrder) => {
-        const oldIndex = columnOrder.indexOf(active.id as string);
-        const newIndex = columnOrder.indexOf(over.id as string);
-        return arrayMove(columnOrder, oldIndex, newIndex); //this is just a splice util
-      });
-    }
-  }
-
-  const sensors = useSensors(
-    useSensor(MouseSensor, {}),
-    useSensor(TouchSensor, {}),
-    useSensor(KeyboardSensor, {})
-  );
-
   return (
     <Card>
       <CardHeader className="border-b border-border p-4 lg:p-5">
         <CardTitle>Category List</CardTitle>
       </CardHeader>
       <CardContent className="p-4 lg:p-5">
-        <DndContext
-          collisionDetection={closestCenter}
-          modifiers={[restrictToHorizontalAxis]}
-          onDragEnd={handleDragEnd}
-          sensors={sensors}
-        >
-          <DataGrid table={table} columnOrder={columnOrder} />
-        </DndContext>
+        <DataGrid
+          table={table}
+          columnOrder={columnOrder}
+          setColumnOrder={setColumnOrder}
+        />
       </CardContent>
     </Card>
   );

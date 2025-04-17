@@ -18,6 +18,9 @@ const DataGridHeader = () => {
       ref={headerRef}
     >
       <Grid className="w-full table-fixed">
+        <colgroup>
+          <col style={{ minWidth: "36px", width: "36px" }} />
+        </colgroup>
         <GridHeader className="h-12">
           {table.getHeaderGroups().map((headerGroup) => (
             <GridRow

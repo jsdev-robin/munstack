@@ -24,6 +24,9 @@ const DataGridBody = () => {
       }}
     >
       <Grid className="w-full table-fixed">
+        <colgroup>
+          <col style={{ minWidth: "36px", width: "36px" }} />
+        </colgroup>
         <GridBody>
           {table.getRowModel().rows.map((row) => (
             <GridRow key={row.id} className="*:border-r *:border-border">

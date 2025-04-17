@@ -8,6 +8,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import DataGrid from "@/components/grid/Index";
+import DataGridIndeterminateCheckbox from "@/components/grid/particles/DataGridIndeterminateCheckbox";
 
 export type Person = {
   firstName: string;
@@ -365,6 +366,32 @@ const people: Person[] = [
 const DashboardCategoryList = () => {
   const columns = React.useMemo<ColumnDef<Person>[]>(
     () => [
+      {
+        id: "select",
+        header: ({ table }) => (
+          <div>
+            <DataGridIndeterminateCheckbox
+              {...{
+                checked: table.getIsAllRowsSelected(),
+                indeterminate: table.getIsSomeRowsSelected(),
+                onChange: table.getToggleAllRowsSelectedHandler(),
+              }}
+            />
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div>
+            <DataGridIndeterminateCheckbox
+              {...{
+                checked: row.getIsSelected(),
+                disabled: !row.getCanSelect(),
+                indeterminate: row.getIsSomeSelected(),
+                onChange: row.getToggleSelectedHandler(),
+              }}
+            />
+          </div>
+        ),
+      },
       {
         accessorKey: "firstName",
         cell: (info) => info.getValue(),

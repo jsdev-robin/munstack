@@ -7,6 +7,7 @@ interface DataGridContextValue<T> {
   headerRef: React.RefObject<HTMLDivElement | null>;
   bodyRef: React.RefObject<HTMLDivElement | null>;
   table: Table<T>;
+  columnOrder: string[];
 }
 
 const DataGridContext = createContext<DataGridContextValue<any> | null>(null);
@@ -18,6 +19,7 @@ interface MunGridProviderProps<T> extends DataGridProps<T> {
 export const DataGridPrivider = <T,>({
   children,
   table,
+  columnOrder,
 }: MunGridProviderProps<T>) => {
   const headerRef = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
@@ -28,6 +30,7 @@ export const DataGridPrivider = <T,>({
         headerRef,
         bodyRef,
         table,
+        columnOrder,
       }}
     >
       {children}

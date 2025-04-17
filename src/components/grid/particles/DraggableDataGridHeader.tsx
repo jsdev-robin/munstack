@@ -22,7 +22,8 @@ const DraggableDataGridHeader = <T,>({
     transform: CSS.Translate.toString(transform),
     transition: "width transform 0.2s ease-in-out",
     whiteSpace: "nowrap",
-    width: header.column.getSize(),
+    width: header.column.getSize() || 200,
+    minWidth: header.column.getSize() || 200,
     zIndex: isDragging ? 1 : 0,
   };
 

@@ -56,10 +56,10 @@ const DataGridToolbar = () => {
               />
             </div>
             <div className="max-h-64 overflow-y-auto border-b border-border">
-              <div className="space-y-4 px-2 py-1">
+              <div className="space-y-4 p-2">
                 {filteredColumns.length > 0 ? (
                   filteredColumns.map((column) => (
-                    <div key={column.id} className="px-1">
+                    <div key={column.id}>
                       <Label>
                         <Checkbox
                           {...{

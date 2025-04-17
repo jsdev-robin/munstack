@@ -438,6 +438,7 @@ const DashboardCategoryList = () => {
           table={table}
           columnOrder={columnOrder}
           setColumnOrder={setColumnOrder}
+          toolbar={true}
         />
       </CardContent>
     </Card>

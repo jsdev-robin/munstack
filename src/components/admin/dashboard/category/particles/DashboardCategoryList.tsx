@@ -471,8 +471,6 @@ const DashboardCategoryList = () => {
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    debugHeaders: true,
-    debugColumns: false,
   });
 
   return (

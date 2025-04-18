@@ -61,9 +61,9 @@ const DataGridFilter = <T,>({ column }: DataGridFilterProps<T>) => {
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="all">All</SelectItem>
-        <SelectItem value="complicated">complicated</SelectItem>
-        <SelectItem value="relationship">relationship</SelectItem>
-        <SelectItem value="single">single</SelectItem>
+        <SelectItem value="complicated">Complicated</SelectItem>
+        <SelectItem value="relationship">Relationship</SelectItem>
+        <SelectItem value="single">Single</SelectItem>
       </SelectContent>
     </Select>
   ) : (

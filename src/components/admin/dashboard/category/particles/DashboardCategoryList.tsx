@@ -466,6 +466,7 @@ const DashboardCategoryList = () => {
     filterFns: {},
     state: {
       columnFilters,
+      columnOrder,
     },
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),

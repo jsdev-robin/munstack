@@ -51,13 +51,9 @@ const DataGridFilter = <T,>({ column }: DataGridFilterProps<T>) => {
     </div>
   ) : filterVariant === "select" ? (
     <Select
-      value={columnFilterValue?.toString()}
+      value={columnFilterValue?.toString() || "all"}
       onValueChange={(value) => {
-        if (value === "all") {
-          column.setFilterValue("");
-        } else {
-          column.setFilterValue(value);
-        }
+        column.setFilterValue(value === "all" ? undefined : value);
       }}
     >
       <SelectTrigger className="w-full" size="sm">

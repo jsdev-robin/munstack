@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import React from "react";
@@ -8,18 +7,10 @@ import {
   ColumnFiltersState,
   getCoreRowModel,
   getFilteredRowModel,
-  RowData,
   useReactTable,
 } from "@tanstack/react-table";
 import DataGrid from "@/components/grid/Index";
 import DataGridIndeterminateCheckbox from "@/components/grid/particles/DataGridIndeterminateCheckbox";
-
-declare module "@tanstack/react-table" {
-  //allows us to define custom properties for our columns
-  interface ColumnMeta<TData extends RowData, TValue> {
-    filterVariant?: "text" | "range" | "select";
-  }
-}
 
 export type Person = {
   firstName: string;
@@ -433,6 +424,9 @@ const DashboardCategoryList = () => {
         accessorKey: "status",
         header: "Status",
         id: "status",
+        meta: {
+          filterVariant: "select",
+        },
       },
       {
         accessorKey: "progress",

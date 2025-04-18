@@ -1,13 +1,28 @@
 "use client";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
+import { Column, RowData } from "@tanstack/react-table";
 import DataGridDebouncedInput from "./DataGridDebouncedInput";
-import { Column } from "@tanstack/react-table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-const DataGridFilter: React.FC<{ column: Column<any, unknown> }> = ({
-  column,
-}) => {
+declare module "@tanstack/react-table" {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  interface ColumnMeta<TData extends RowData, TValue> {
+    filterVariant?: "text" | "range" | "select";
+  }
+}
+
+interface DataGridFilterProps<T> {
+  column: Column<T, unknown>;
+}
+
+const DataGridFilter = <T,>({ column }: DataGridFilterProps<T>) => {
   const columnFilterValue = column.getFilterValue();
   const { filterVariant } = column.columnDef.meta ?? {};
 
@@ -35,15 +50,26 @@ const DataGridFilter: React.FC<{ column: Column<any, unknown> }> = ({
       </div>
     </div>
   ) : filterVariant === "select" ? (
-    <select
-      onChange={(e) => column.setFilterValue(e.target.value)}
+    <Select
       value={columnFilterValue?.toString()}
+      onValueChange={(value) => {
+        if (value === "all") {
+          column.setFilterValue("");
+        } else {
+          column.setFilterValue(value);
+        }
+      }}
     >
-      <option value="">All</option>
-      <option value="complicated">complicated</option>
-      <option value="relationship">relationship</option>
-      <option value="single">single</option>
-    </select>
+      <SelectTrigger className="w-full" size="sm">
+        <SelectValue placeholder="Status" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="all">All</SelectItem>
+        <SelectItem value="complicated">complicated</SelectItem>
+        <SelectItem value="relationship">relationship</SelectItem>
+        <SelectItem value="single">single</SelectItem>
+      </SelectContent>
+    </Select>
   ) : (
     <DataGridDebouncedInput
       className="h-8"

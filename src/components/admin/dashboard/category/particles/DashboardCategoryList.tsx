@@ -420,6 +420,9 @@ const DashboardCategoryList = () => {
         accessorKey: "age",
         header: () => "Age",
         id: "age",
+        meta: {
+          filterVariant: "range",
+        },
       },
       {
         accessorKey: "visits",
@@ -430,6 +433,9 @@ const DashboardCategoryList = () => {
         accessorKey: "status",
         header: "Status",
         id: "status",
+        meta: {
+          filterVariant: "select",
+        },
       },
       {
         accessorKey: "progress",

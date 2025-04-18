@@ -4,6 +4,13 @@
 import React from "react";
 import DataGridDebouncedInput from "./DataGridDebouncedInput";
 import { Column } from "@tanstack/react-table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const DataGridFilter: React.FC<{ column: Column<any, unknown> }> = ({
   column,
@@ -36,15 +43,22 @@ const DataGridFilter: React.FC<{ column: Column<any, unknown> }> = ({
       <div className="h-1" />
     </div>
   ) : filterVariant === "select" ? (
-    <select
-      onChange={(e) => column.setFilterValue(e.target.value)}
-      value={columnFilterValue?.toString()}
-    >
-      <option value="">All</option>
-      <option value="complicated">complicated</option>
-      <option value="relationship">relationship</option>
-      <option value="single">single</option>
-    </select>
+    <>
+      <Select
+        onValueChange={(value) => column.setFilterValue(String(value))}
+        value={columnFilterValue?.toString()}
+      >
+        <SelectTrigger className="w-full" size="sm">
+          <SelectValue placeholder="Status" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">All</SelectItem>
+          <SelectItem value="complicated">complicated</SelectItem>
+          <SelectItem value="relationship">relationship</SelectItem>
+          <SelectItem value="single">single</SelectItem>
+        </SelectContent>
+      </Select>
+    </>
   ) : (
     <DataGridDebouncedInput
       className="h-8"

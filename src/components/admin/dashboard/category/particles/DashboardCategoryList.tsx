@@ -433,9 +433,6 @@ const DashboardCategoryList = () => {
         accessorKey: "status",
         header: "Status",
         id: "status",
-        meta: {
-          filterVariant: "select",
-        },
       },
       {
         accessorKey: "progress",

@@ -5,6 +5,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { flexRender, Header } from "@tanstack/react-table";
 import { CSS } from "@dnd-kit/utilities";
 import { GridHead } from "@/components/ui/grid";
+import { GripHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
 import DataGridFilter from "./DataGridFilter";
 
@@ -34,23 +35,30 @@ const DraggableDataGridHeader = <T,>({
       colSpan={header.colSpan}
       ref={setNodeRef}
       style={style}
-      {...attributes}
-      {...listeners}
-      className={cn("truncate py-2", {
-        "bg-card shadow-xl/30 cursor-all-scroll": isDragging,
+      className={cn("truncate group p-2 capitalize", {
+        "bg-card shadow-xl/30": isDragging,
       })}
     >
       <div className="space-y-2">
-        <div>
+        <div className={cn("flex items-center justify-between")}>
           {header.isPlaceholder
             ? null
             : flexRender(header.column.columnDef.header, header.getContext())}
+          <button
+            {...attributes}
+            {...listeners}
+            className={cn(
+              "cursor-all-scroll opacity-0 group-hover:opacity-100"
+            )}
+          >
+            <GripHorizontal size={20} />
+          </button>
         </div>
-        <div>
-          {header.column.getCanFilter() ? (
+        {header.column.getCanFilter() ? (
+          <div>
             <DataGridFilter column={header.column} />
-          ) : null}
-        </div>
+          </div>
+        ) : null}
       </div>
     </GridHead>
   );

@@ -376,6 +376,7 @@ const DashboardCategoryList = () => {
                 indeterminate: table.getIsSomeRowsSelected(),
                 onChange: table.getToggleAllRowsSelectedHandler(),
               }}
+              aria-label="Select all"
             />
           </div>
         ),
@@ -388,6 +389,7 @@ const DashboardCategoryList = () => {
                 indeterminate: row.getIsSomeSelected(),
                 onChange: row.getToggleSelectedHandler(),
               }}
+              aria-label="Select row"
             />
           </div>
         ),
@@ -446,6 +448,7 @@ const DashboardCategoryList = () => {
   const [columnOrder, setColumnOrder] = React.useState<string[]>(() =>
     columns.map((c) => c.id!)
   );
+  const [globalFilter, setGlobalFilter] = React.useState("");
 
   const table = useReactTable({
     data,
@@ -453,8 +456,10 @@ const DashboardCategoryList = () => {
     getCoreRowModel: getCoreRowModel(),
     state: {
       columnOrder,
+      globalFilter,
     },
     onColumnOrderChange: setColumnOrder,
+    onGlobalFilterChange: setGlobalFilter,
     debugTable: true,
     debugHeaders: true,
     debugColumns: true,

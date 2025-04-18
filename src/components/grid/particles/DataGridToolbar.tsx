@@ -82,6 +82,13 @@ const DataGridToolbar = () => {
           </div>
         </div>
       )}
+      {activePanel === "filter" && (
+        <div className={cn("w-60 border-l border-border transition-all")}>
+          <div className="h-[48.5px] flex items-center px-2">
+            <Input placeholder="Search all columns..." />
+          </div>
+        </div>
+      )}
       <div className="w-10 border-l border-border">
         {[
           { value: "columns", label: "Columns", icon: Columns },

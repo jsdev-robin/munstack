@@ -1,14 +1,25 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ColumnDef,
+  ColumnFiltersState,
   getCoreRowModel,
+  getFilteredRowModel,
+  RowData,
   useReactTable,
 } from "@tanstack/react-table";
 import DataGrid from "@/components/grid/Index";
 import DataGridIndeterminateCheckbox from "@/components/grid/particles/DataGridIndeterminateCheckbox";
+
+declare module "@tanstack/react-table" {
+  //allows us to define custom properties for our columns
+  interface ColumnMeta<TData extends RowData, TValue> {
+    filterVariant?: "text" | "range" | "select";
+  }
+}
 
 export type Person = {
   firstName: string;
@@ -364,7 +375,7 @@ const people: Person[] = [
 ];
 
 const DashboardCategoryList = () => {
-  const columns = React.useMemo<ColumnDef<Person>[]>(
+  const columns = React.useMemo<ColumnDef<Person, unknown>[]>(
     () => [
       {
         id: "select",
@@ -448,19 +459,22 @@ const DashboardCategoryList = () => {
   const [columnOrder, setColumnOrder] = React.useState<string[]>(() =>
     columns.map((c) => c.id!)
   );
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
 
   const table = useReactTable({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
-
+    filterFns: {},
     state: {
-      columnOrder,
+      columnFilters,
     },
-    onColumnOrderChange: setColumnOrder,
-    debugTable: true,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
     debugHeaders: true,
-    debugColumns: true,
+    debugColumns: false,
   });
 
   return (

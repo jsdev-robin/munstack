@@ -8,6 +8,7 @@ import { GridHead } from "@/components/ui/grid";
 import { GripHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import DataGridFilter from "./DataGridFilter";
 
 const DraggableDataGridHeader = <T,>({
   header,
@@ -35,7 +36,7 @@ const DraggableDataGridHeader = <T,>({
       colSpan={header.colSpan}
       ref={setNodeRef}
       style={style}
-      className={cn("group truncate", {
+      className={cn("truncate py-2", {
         "bg-card shadow-xl/30": isDragging,
       })}
     >
@@ -46,7 +47,7 @@ const DraggableDataGridHeader = <T,>({
         <Button
           {...attributes}
           {...listeners}
-          className={cn("hidden group-hover:inline-flex", {
+          className={cn({
             "cursor-all-scroll": isDragging,
           })}
           size="icon"
@@ -55,6 +56,11 @@ const DraggableDataGridHeader = <T,>({
           <GripHorizontal size={20} />
         </Button>
       </div>
+      {header.column.getCanFilter() ? (
+        <div>
+          <DataGridFilter column={header.column} />
+        </div>
+      ) : null}
     </GridHead>
   );
 };

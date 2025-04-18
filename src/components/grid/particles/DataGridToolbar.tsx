@@ -60,7 +60,7 @@ const DataGridToolbar = () => {
                 {filteredColumns.length > 0 ? (
                   filteredColumns.map((column) => (
                     <div key={column.id}>
-                      <Label>
+                      <Label className="capitalize">
                         <Checkbox
                           {...{
                             type: "checkbox",

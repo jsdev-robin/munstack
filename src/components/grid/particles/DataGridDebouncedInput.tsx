@@ -22,7 +22,7 @@ const DataGridDebouncedInput: React.FC<
     }, debounce);
 
     return () => clearTimeout(timeout);
-  }, [value, debounce, onChange]);
+  }, [value]);
 
   return (
     <Input
